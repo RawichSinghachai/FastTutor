@@ -81,9 +81,9 @@ export const login = async (username: any, password: any) => {
       },
       secret
     );
-    return { status: "correct", token };
+    return { status: 'login success', token };
   } catch (error) {
-    return { status: "incorrect" };
+    return { status: 'login faild' };
   }
 };
 

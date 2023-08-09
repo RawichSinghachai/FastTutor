@@ -97,7 +97,9 @@ function TutorCard({ name, subject, stars }: Props) {
                                 </IconButton>}
                         </Stack>
 
-                        <Button variant="contained" sx={{bgcolor:teal[500] , ":hover": {bgcolor:teal[700]} }}>Contact</Button>
+                        <Button variant="contained" sx={{bgcolor:teal[500] , ":hover": {bgcolor:teal[700]} }}>
+                            Contact
+                        </Button>
 
                     </Stack>
 

@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/menu/Header';
 import Sidebar from '@/components/menu/Sidebar';
 import Drawer from '@mui/material/Drawer';
@@ -34,23 +34,20 @@ const Classroom = (props: Props) => {
 
   useEffect(() => {
     let back: boolean = true
-    for (let i = 0; i < userdata.course.length; i++) {
-      if (userdata.course[i] === mycourse) {
-        back = false
-        break
+    if (userdata.course) {
+      for (let i = 0; i < userdata.course.length; i++) {
+        if (userdata.course[i] === mycourse) {
+          back = false
+          break
+        }
       }
     }
+
 
     if (back) {
       router.push('/course')
     }
   }, [])
-  
-  
-
-    
-
-  console.log('classroom');
 
 
 

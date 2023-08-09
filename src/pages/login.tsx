@@ -15,14 +15,61 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Image from 'next/image';
 import logoshark from '../../public/logoshark.jpg'
-
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import Modal from '@mui/material/Modal';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import { lightGreen, red, grey, teal } from '@mui/material/colors';
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  py: 4,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+};
 
 
 export default function Login() {
+
   const router = useRouter()
   const dispatch = useDispatch()
+
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openFaild, setOpenFaild] = useState(false);
+
+  const handleOpenSuccess = () => {
+    setOpenSuccess(true);
+    setTimeout(() => {
+      handleCloseSuccess()
+    }, 1000);
+  }
+
+  const handleCloseSuccess = () => {
+    setOpenSuccess(false);
+    setName('')
+    setPassword('')
+    router.push('/')
+  }
+
+  const handleOpenFaild = () => {
+    setOpenFaild(true);
+    setTimeout(() => {
+      handleCloseFaild()
+    }, 1000);
+  }
+
+  const handleCloseFaild = () => {
+    setOpenFaild(false);
+  }
 
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -39,13 +86,11 @@ export default function Login() {
       sessionStorage.setItem('token', datauser.data.token)
     }
 
-
-    if (datauser.data.status === 'correct') {
-      setName('')
-      setPassword('')
-      router.push('/')
-    } else if (datauser.data.status === 'incorrect') {
-      console.log('login fail');
+    if (datauser.data.status === 'login success') {
+      handleOpenSuccess()
+    }
+    if (datauser.data.status === 'login faild') {
+      handleOpenFaild()
     }
   }
 
@@ -56,7 +101,7 @@ export default function Login() {
   var width: number = 500
   var height: number = 500
 
- if (breakpointMd) {
+  if (breakpointMd) {
     var width: number = 350
     var height: number = 350
   }
@@ -65,7 +110,7 @@ export default function Login() {
   return (
     <div>
       <Checkdata />
-      <Card sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <Card sx={{ width: { md: 1000, sm: 700, }, p: 2 }} elevation={12}>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
@@ -91,7 +136,10 @@ export default function Login() {
                   <Typography variant="body2" gutterBottom>Forget Password?</Typography>
                 </Stack>
 
-                <Button variant="contained" fullWidth type='submit'>Submit</Button>
+                <Button variant="contained" fullWidth type='submit'
+                  sx={{ bgcolor: teal[500], ":hover": { bgcolor: teal[700] } }}>
+                  Submit
+                </Button>
 
               </form>
 
@@ -103,7 +151,31 @@ export default function Login() {
           </Box>
 
         </Card>
-      </Card>
+
+        <Modal
+          open={openSuccess}
+          onClose={handleCloseSuccess}
+        >
+          <Box sx={style}>
+            <CheckIcon sx={{ fontSize: 70, color: grey[50], bgcolor: lightGreen['A400'], borderRadius: '50%', p: 2, mb: 2 }} />
+            <Typography variant="h5" >
+              Login Success
+            </Typography>
+          </Box>
+        </Modal>
+
+        <Modal
+          open={openFaild}
+          onClose={handleCloseFaild}
+        >
+          <Box sx={style}>
+            <ClearIcon sx={{ fontSize: 70, color: grey[50], bgcolor: red['A400'], borderRadius: '50%', p: 2, mb: 2 }} />
+            <Typography variant="h5" >
+              Login Faild
+            </Typography>
+          </Box>
+        </Modal>
+      </Box>
     </div>
   )
 }
